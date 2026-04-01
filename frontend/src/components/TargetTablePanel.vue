@@ -32,7 +32,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(track, index) in radarData?.tracks" :key="track.track_id" @click="handleRowClick(track)" class="clickable-row">
+              <tr v-for="(track, index) in radarData?.tracks" 
+                  :key="track.track_id" 
+                  @click="handleRowClick(track)" 
+                  class="clickable-row"
+                  :class="{'selected-row': selectedTrackId === track.track_id}">
                 <td>{{ index + 1 }}</td>
                 <td>{{ track.track_id }}</td>
                 <td>{{ translateType(track.type) }}</td>
@@ -57,15 +61,17 @@ import { ref } from 'vue'
 
 const props = defineProps({
   status: Object,
-  radarData: Object
+  radarData: Object,
+  selectedTrackId: Number
 })
 
-const emit = defineEmits(['focusTarget'])
+const emit = defineEmits(['focusTarget', 'selectTarget'])
 
 const handleRowClick = (track) => {
   if (track.position) {
     emit('focusTarget', track.position)
   }
+  emit('selectTarget', track.track_id)
 }
 
 const isCollapsed = ref(false)
@@ -138,5 +144,8 @@ th { color: #94a3b8; font-weight: normal; }
 }
 .clickable-row:hover {
   background-color: rgba(255,255,255,0.1);
+}
+.selected-row {
+  background-color: rgba(59, 130, 246, 0.4) !important;
 }
 </style>

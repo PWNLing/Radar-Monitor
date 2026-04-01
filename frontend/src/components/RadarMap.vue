@@ -8,12 +8,41 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 
 const props = defineProps({
   radarData: Object,
-  focusPosition: Object
+  focusPosition: Object,
+  selectedTrackId: Number
 })
+
+const emit = defineEmits(['selectTarget', 'focusTarget'])
 
 const map = shallowRef(null)
 const markers = ref(new Map()) // trackId -> AMap.Marker
 const egoMarker = shallowRef(null)
+
+const createMarkerContent = (type, isSelected) => {
+  const typeColors = {
+    'PEDESTRIAN': '#10b981', // green
+    'CAR': '#3b82f6', // blue
+    'BICYCLE': '#f59e0b', // yellow
+    'TRUCK': '#8b5cf6', // purple
+  }
+  const color = typeColors[type] || '#94a3b8'
+  const size = isSelected ? 20 : 12
+  const border = isSelected ? '3px solid white' : '2px solid white'
+  const shadow = isSelected ? `0 0 10px ${color}, 0 0 20px ${color}` : '0 2px 4px rgba(0,0,0,0.3)'
+  const zIndex = isSelected ? 100 : 1
+  
+  return `<div style="
+    width: ${size}px; 
+    height: ${size}px; 
+    background-color: ${color}; 
+    border-radius: 50%; 
+    border: ${border}; 
+    box-shadow: ${shadow};
+    transition: all 0.2s;
+    position: relative;
+    z-index: ${zIndex};
+  "></div>`
+}
 
 onMounted(() => {
   if (import.meta.env.VITE_AMAP_SECURITY_CODE) {
@@ -59,16 +88,27 @@ watch(() => props.radarData, (newData) => {
     newData.tracks.forEach(track => {
       currentIds.add(track.track_id)
       const position = [track.position.longitude, track.position.latitude]
+      const isSelected = props.selectedTrackId === track.track_id
+      const content = createMarkerContent(track.type, isSelected)
       
       if (markers.value.has(track.track_id)) {
         // 存在则移动
-        markers.value.get(track.track_id).setPosition(position)
+        const marker = markers.value.get(track.track_id)
+        marker.setPosition(position)
+        marker.setContent(content)
+        marker.setExtData({ type: track.type })
       } else {
         // 新增目标
         const marker = new AMap.Marker({
           position: position,
+          content: content,
           title: `ID: ${track.track_id} | ${track.type}`,
-          // 这里可以使用不同颜色区分不同类型，简单起见用默认标记
+          anchor: 'center',
+          extData: { type: track.type }
+        })
+        marker.on('click', () => {
+          emit('selectTarget', track.track_id)
+          emit('focusTarget', track.position)
         })
         map.value.add(marker)
         markers.value.set(track.track_id, marker)
@@ -84,6 +124,19 @@ watch(() => props.radarData, (newData) => {
     }
   }
 }, { deep: true })
+
+watch(() => props.selectedTrackId, (newId, oldId) => {
+  if (oldId && markers.value.has(oldId)) {
+    const marker = markers.value.get(oldId)
+    const type = marker.getExtData().type
+    marker.setContent(createMarkerContent(type, false))
+  }
+  if (newId && markers.value.has(newId)) {
+    const marker = markers.value.get(newId)
+    const type = marker.getExtData().type
+    marker.setContent(createMarkerContent(type, true))
+  }
+})
 
 watch(() => props.focusPosition, (pos) => {
   if (!map.value || !pos) return

@@ -1,8 +1,22 @@
 <template>
   <div class="app-container">
-    <RadarMap :radarData="radarData" :focusPosition="focusPosition" class="map-layer" />
+    <RadarMap 
+      :radarData="radarData" 
+      :focusPosition="focusPosition" 
+      :selectedTrackId="selectedTrackId"
+      @selectTarget="handleSelectTarget"
+      @focusTarget="handleFocusTarget"
+      class="map-layer" 
+    />
     <StatusHeader :status="systemStatus" class="status-layer" />
-    <TargetTablePanel :status="systemStatus" :radarData="radarData" @focusTarget="handleFocusTarget" class="panel-layer" />
+    <TargetTablePanel 
+      :status="systemStatus" 
+      :radarData="radarData" 
+      :selectedTrackId="selectedTrackId"
+      @focusTarget="handleFocusTarget" 
+      @selectTarget="handleSelectTarget"
+      class="panel-layer" 
+    />
   </div>
 </template>
 
@@ -15,10 +29,15 @@ import TargetTablePanel from './components/TargetTablePanel.vue'
 
 const { systemStatus, radarData } = useRadarData()
 const focusPosition = ref(null)
+const selectedTrackId = ref(null)
 
 const handleFocusTarget = (position) => {
   // 添加一个时间戳强制触发响应式更新，即使点击的是同一个位置
   focusPosition.value = { ...position, _t: Date.now() }
+}
+
+const handleSelectTarget = (trackId) => {
+  selectedTrackId.value = trackId
 }
 </script>
 
