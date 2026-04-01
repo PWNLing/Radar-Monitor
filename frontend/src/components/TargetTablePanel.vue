@@ -22,21 +22,27 @@
           <table>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>序号</th>
+                <th>航迹ID</th>
                 <th>类别</th>
+                <th>经度</th>
+                <th>纬度</th>
                 <th>速度(m/s)</th>
                 <th>距离(m)</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="track in radarData?.tracks" :key="track.track_id">
+              <tr v-for="(track, index) in radarData?.tracks" :key="track.track_id">
+                <td>{{ index + 1 }}</td>
                 <td>{{ track.track_id }}</td>
                 <td>{{ translateType(track.type) }}</td>
-                <td>{{ track.velocity.toFixed(2) }}</td>
-                <td>{{ track.distance.toFixed(2) }}</td>
+                <td>{{ track.position?.longitude?.toFixed(6) || '-' }}</td>
+                <td>{{ track.position?.latitude?.toFixed(6) || '-' }}</td>
+                <td>{{ track.velocity?.toFixed(2) || '-' }}</td>
+                <td>{{ track.distance?.toFixed(2) || '-' }}</td>
               </tr>
               <tr v-if="!radarData?.tracks || radarData.tracks.length === 0">
-                <td colspan="4" class="empty-text">暂无目标数据</td>
+                <td colspan="7" class="empty-text">暂无目标数据</td>
               </tr>
             </tbody>
           </table>
