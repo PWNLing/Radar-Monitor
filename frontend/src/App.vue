@@ -67,7 +67,7 @@ const handleSelectTarget = (trackId) => {
   top: 20px;
   right: 20px;
   bottom: 20px;
-  width: 400px;
+  width: 550px;
   z-index: 10;
 }
 </style>

@@ -15,6 +15,15 @@
         </div>
       </div>
 
+      <!-- 图例区 -->
+      <div class="legend-section">
+        <div class="legend-item"><span class="color-dot" style="background: #10b981"></span>行人</div>
+        <div class="legend-item"><span class="color-dot" style="background: #3b82f6"></span>汽车</div>
+        <div class="legend-item"><span class="color-dot" style="background: #f59e0b"></span>自行车</div>
+        <div class="legend-item"><span class="color-dot" style="background: #8b5cf6"></span>卡车</div>
+        <div class="legend-item"><span class="color-dot" style="background: #94a3b8"></span>其他</div>
+      </div>
+
       <!-- 表格区 -->
       <div class="table-section">
         <h3>目标列表 ({{ radarData?.tracks?.length || 0 }})</h3>
@@ -133,8 +142,30 @@ input { flex: 1; padding: 6px; background: rgba(0,0,0,0.5); border: 1px solid #4
 .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; color: white; }
 .btn-primary { background: #3b82f6; }
 .btn-danger { background: #ef4444; }
-.table-wrapper { overflow-y: auto; flex: 1; max-height: calc(100vh - 200px); }
-table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;}
+
+.legend-section {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #cbd5e1;
+}
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.table-wrapper { overflow-y: auto; flex: 1; max-height: calc(100vh - 250px); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;}
 th, td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 th { color: #94a3b8; font-weight: normal; }
 .empty-text { text-align: center; color: #64748b; padding: 20px;}
