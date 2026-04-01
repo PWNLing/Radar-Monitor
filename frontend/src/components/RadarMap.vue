@@ -58,7 +58,7 @@ onMounted(() => {
   }).then((AMap) => {
     map.value = new AMap.Map('map-container', {
       zoom: 17,
-      center: [110.416819, 25.311724], // 默认桂电花江校区
+      center: [xxx, xxx], // 默认地点
       mapStyle: 'amap://styles/darkblue'
     })
   }).catch(e => console.error(e))

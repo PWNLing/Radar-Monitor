@@ -60,6 +60,8 @@ npm run dev
 4. 点击 **启动监听** 按钮。
 5. 后端开始接收该端口的雷达 UDP 报文，前端地图和表格将实时更新目标航迹。
 
+**【注】还需要修改frontend\src\components\RadarMap.vue的center: [xxx, xxx], // 默认地点，由于此处涉及到国家地理位置，故此处不显示**
+
 ## 📁 目录结构说明
 ```text
 /workspace
@@ -77,3 +79,7 @@ npm run dev
 │   └── vite.config.js    # Vite 配置文件
 └── docs/             # 项目文档与设计说明
 ```
+
+## 项目展示
+
+![image](assets/image.png)
