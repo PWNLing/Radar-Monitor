@@ -32,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(track, index) in radarData?.tracks" :key="track.track_id">
+              <tr v-for="(track, index) in radarData?.tracks" :key="track.track_id" @click="handleRowClick(track)" class="clickable-row">
                 <td>{{ index + 1 }}</td>
                 <td>{{ track.track_id }}</td>
                 <td>{{ translateType(track.type) }}</td>
@@ -59,6 +59,14 @@ const props = defineProps({
   status: Object,
   radarData: Object
 })
+
+const emit = defineEmits(['focusTarget'])
+
+const handleRowClick = (track) => {
+  if (track.position) {
+    emit('focusTarget', track.position)
+  }
+}
 
 const isCollapsed = ref(false)
 const portInput = ref(8888)
@@ -124,4 +132,11 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: lef
 th, td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 th { color: #94a3b8; font-weight: normal; }
 .empty-text { text-align: center; color: #64748b; padding: 20px;}
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.clickable-row:hover {
+  background-color: rgba(255,255,255,0.1);
+}
 </style>

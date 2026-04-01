@@ -7,7 +7,8 @@ import { onMounted, watch, ref, shallowRef } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
 
 const props = defineProps({
-  radarData: Object
+  radarData: Object,
+  focusPosition: Object
 })
 
 const map = shallowRef(null)
@@ -15,15 +16,20 @@ const markers = ref(new Map()) // trackId -> AMap.Marker
 const egoMarker = shallowRef(null)
 
 onMounted(() => {
-  window._AMapSecurityConfig = {
-    securityJsCode: import.meta.env.VITE_AMAP_SECURITY_CODE,
+  if (import.meta.env.VITE_AMAP_SECURITY_CODE) {
+    window._AMapSecurityConfig = {
+      securityJsCode: import.meta.env.VITE_AMAP_SECURITY_CODE,
+    }
   }
+  
   AMapLoader.load({
-    key: import.meta.env.VITE_AMAP_KEY,
+    key: import.meta.env.VITE_AMAP_KEY || '1bf5b821a81e3a1f81a7006d6bb15e1f', // 默认使用测试Key
     version: '2.0',
+    plugins: ['AMap.Scale', 'AMap.ToolBar'] // 可选的插件
   }).then((AMap) => {
     map.value = new AMap.Map('map-container', {
-      zoom: 18,
+      zoom: 17,
+      center: [110.416819, 25.311724], // 默认桂电花江校区
       mapStyle: 'amap://styles/darkblue'
     })
   }).catch(e => console.error(e))
@@ -78,6 +84,12 @@ watch(() => props.radarData, (newData) => {
     }
   }
 }, { deep: true })
+
+watch(() => props.focusPosition, (pos) => {
+  if (!map.value || !pos) return
+  // 定位到目标位置，并稍微放大层级
+  map.value.setZoomAndCenter(19, [pos.longitude, pos.latitude])
+})
 </script>
 
 <style scoped>
