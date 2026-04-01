@@ -74,7 +74,7 @@ nohup java -jar target/monitor-1.0.0-SNAPSHOT.jar > app.log 2>&1 &
    ```bash
    npm run build
    ```
-   *构建成功后，前端产物会输出至 `frontend/dist/` 目录中。请记录该目录的绝对路径，稍后需配置到 Nginx 中。*
+   *构建成功后，前端产物会输出至 `frontend/dist/` 目录中。请记录该目录的绝对路径，稍后需配置到 Nginx 中，每次修改前端代码都需要运行一次，但nginx不用重启。*
 
 ---
 
@@ -90,12 +90,12 @@ nohup java -jar target/monitor-1.0.0-SNAPSHOT.jar > app.log 2>&1 &
 server {
     # 监听端口
     listen 80;
-    # 你的域名或服务器IP
+    # 【此处要改】你的域名或服务器IP，本地部署这里填127.0.0.1
     server_name your_domain_or_ip;
 
     # 1. 前端静态资源托管
     location / {
-        # 替换为 frontend/dist 目录的绝对路径
+        # 【此处要改】替换为 frontend/dist 目录的绝对路径
         root /workspace/frontend/dist;
         index index.html index.htm;
         

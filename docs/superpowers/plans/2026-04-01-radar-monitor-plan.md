@@ -553,7 +553,7 @@ git commit -m "feat: add UDP listener and status processing logic"
 - Create: `frontend/src/components/TargetTablePanel.vue`
 - Create: `frontend/src/components/RadarMap.vue`
 
-- [ ] **Step 1: 创建 WebSocket 状态管理 Hook**
+- [x] **Step 1: 创建 WebSocket 状态管理 Hook**
 在 `frontend/src/composables/useRadarData.js` 中：
 ```javascript
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -596,7 +596,7 @@ export function useRadarData() {
 }
 ```
 
-- [ ] **Step 2: 创建主布局 App.vue**
+- [x] **Step 2: 创建主布局 App.vue**
 在 `frontend/src/App.vue` 中：
 ```vue
 <template>
@@ -648,7 +648,7 @@ const { systemStatus, radarData } = useRadarData()
 </style>
 ```
 
-- [ ] **Step 3: 提交代码**
+- [x] **Step 3: 提交代码**
 ```bash
 git add frontend/src/composables/ frontend/src/App.vue
 git commit -m "feat: add frontend websocket hook and layout structure"
